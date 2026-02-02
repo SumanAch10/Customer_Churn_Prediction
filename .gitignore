@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Environments
+venv/
+.env/
+.venv/
+env/
+
+# Secrets
+.env
+*.pem
+*.key
+credentials.json
+token.json
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Data (keep out of git; remove this line if you intentionally want data tracked)
+dataset/
+*.csv
+
+# Model artifacts (COMMENT OUT if you want to commit your model for Streamlit Cloud)
+# *.joblib
+# *.pkl
