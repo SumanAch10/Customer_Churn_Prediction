@@ -4,6 +4,8 @@ This project builds and deploys a **Customer Churn Prediction system** using **m
 The model predicts whether a customer is likely to churn based on their account, service, and billing information.
 
 ---
+## https://customerchurnprediction-tq9ketjwbrp4somcnrxgpz.streamlit.app/
+
 
 ## 🚀 Project Overview
 
