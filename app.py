@@ -10,6 +10,7 @@ def load_pipeline():
     return joblib.load("churn_pipeline.joblib")
 
 pipe = load_pipeline()
+# print(pipe)
 # print(pipe.feature_names_in_) //Returns all the features that are used in X_Train
 
 st.title("📉 Customer Churn Prediction")
@@ -28,18 +29,28 @@ if not feature_names:
     st.info("In your notebook run: X_train.columns.tolist() and paste it into app.py.")
     st.stop()
 
+feature_names = [x.lower() for x in feature_names]
+print(feature_names)
 st.subheader("Inputs")
 
 # 3) Build an input form dynamically
 # We'll create a dict of inputs, then convert to a 1-row DataFrame
 inputs = {}
-
 with st.form("churn_form"):
     for col in feature_names:
         # Simple heuristic: treat common numeric columns as numeric, rest as text
         # You'll refine this after first run (I’ll show how below)
         if col.lower() in {"tenure", "monthlycharges", "totalcharges"}:
             inputs[col] = st.number_input(col, value=0.0)
+        elif col.lower() in {"gender"}:
+            inputs[col] = st.selectbox("Gender",["Male","Female"])
+        elif col.lower() in {"partner","dependents","phoneservice","paperlessbilling"}:
+            inputs[col] = st.selectbox(col,["Yes","No"])
+        elif col.lower() in {"seniorcitizen"}:
+            inputs[col] = st.selectbox(col,["1","0"])
+        elif col.lower() in {"paymentmethod"}:
+            inputs[col] = st.selectbox(col,["Bank Transfer","Credit Card","Electronic check","Mailed check"])
+
         else:
             inputs[col] = st.text_input(col, value="")
 
