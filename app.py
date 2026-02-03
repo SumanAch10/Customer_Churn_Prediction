@@ -29,8 +29,8 @@ if not feature_names:
     st.info("In your notebook run: X_train.columns.tolist() and paste it into app.py.")
     st.stop()
 
-feature_names = [x.lower() for x in feature_names]
-print(feature_names)
+# feature_names = [x.lower() for x in feature_names]
+# print(feature_names)
 st.subheader("Inputs")
 
 # 3) Build an input form dynamically
@@ -50,7 +50,15 @@ with st.form("churn_form"):
             inputs[col] = st.selectbox(col,["1","0"])
         elif col.lower() in {"paymentmethod"}:
             inputs[col] = st.selectbox(col,["Bank Transfer","Credit Card","Electronic check","Mailed check"])
-
+        elif col.lower() in {"contract"}:
+            inputs[col] = st.selectbox(col,["Month-to-month","One year","Two year"])
+        elif col.lower() in {"onlinesecurity","onlinebackup","deviceprotection","techsupport"
+                            ,"streamingtv","streamingmovies"}:
+            inputs[col] = st.selectbox(col,["Yes","No","No internet service"]) 
+        elif col.lower() in {"multiplelines"}:
+            inputs[col] = st.selectbox(col,["Yes","No","No phone service"])   
+        elif col.lower() in {"internetservice"}:
+            inputs[col] = st.selectbox(col,["DSL","No","Fiber optic"]) 
         else:
             inputs[col] = st.text_input(col, value="")
 
