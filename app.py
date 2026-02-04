@@ -35,39 +35,56 @@ st.subheader("Inputs")
 
 # 3) Build an input form dynamically
 # We'll create a dict of inputs, then convert to a 1-row DataFrame
+
+
+# Make a schema dictionary
+CATEGORICAL_OPTIONS = {
+    "gender": ["Male", "Female"],
+    "partner": ["Yes", "No"],
+    "dependents": ["Yes", "No"],
+    "phoneservice": ["Yes", "No"],
+    "paperlessbilling": ["Yes", "No"],
+    "seniorcitizen": [0, 1],
+    "paymentmethod": [
+        "Bank transfer (automatic)",
+        "Credit card (automatic)",
+        "Electronic check",
+        "Mailed check"
+    ],
+    "contract": ["Month-to-month", "One year", "Two year"],
+    "onlinesecurity": ["Yes", "No", "No internet service"],
+    "onlinebackup": ["Yes", "No", "No internet service"],
+    "deviceprotection": ["Yes", "No", "No internet service"],
+    "techsupport": ["Yes", "No", "No internet service"],
+    "streamingtv": ["Yes", "No", "No internet service"],
+    "streamingmovies": ["Yes", "No", "No internet service"],
+    "multiplelines": ["Yes", "No", "No phone service"],
+    "internetservice": ["DSL", "Fiber optic", "No"],
+}
+
+NUMERIC_COLS = {"tenure", "monthlycharges", "totalcharges"}
+
+def render_inputs(col):
+    key = col.lower()
+    # Check if key is in categorical options
+    if key in CATEGORICAL_OPTIONS:
+        print(CATEGORICAL_OPTIONS[key])
+        return st.selectbox(col,CATEGORICAL_OPTIONS[key])
+    # Check if key is in numeric columns
+    if key in NUMERIC_COLS:
+        return st.number_input(col,value=0.0)
+    
+    return st.text_input(col,value="")
+
 inputs = {}
 with st.form("churn_form"):
     for col in feature_names:
-        # Simple heuristic: treat common numeric columns as numeric, rest as text
-        # You'll refine this after first run (I’ll show how below)
-        if col.lower() in {"tenure", "monthlycharges", "totalcharges"}:
-            inputs[col] = st.number_input(col, value=0.0)
-        elif col.lower() in {"gender"}:
-            inputs[col] = st.selectbox("Gender",["Male","Female"])
-        elif col.lower() in {"partner","dependents","phoneservice","paperlessbilling"}:
-            inputs[col] = st.selectbox(col,["Yes","No"])
-        elif col.lower() in {"seniorcitizen"}:
-            inputs[col] = st.selectbox(col,["1","0"])
-        elif col.lower() in {"paymentmethod"}:
-            inputs[col] = st.selectbox(col,["Bank Transfer","Credit Card","Electronic check","Mailed check"])
-        elif col.lower() in {"contract"}:
-            inputs[col] = st.selectbox(col,["Month-to-month","One year","Two year"])
-        elif col.lower() in {"onlinesecurity","onlinebackup","deviceprotection","techsupport"
-                            ,"streamingtv","streamingmovies"}:
-            inputs[col] = st.selectbox(col,["Yes","No","No internet service"]) 
-        elif col.lower() in {"multiplelines"}:
-            inputs[col] = st.selectbox(col,["Yes","No","No phone service"])   
-        elif col.lower() in {"internetservice"}:
-            inputs[col] = st.selectbox(col,["DSL","No","Fiber optic"]) 
-        else:
-            inputs[col] = st.text_input(col, value="")
-
+        inputs[col] = render_inputs(col)
     submitted = st.form_submit_button("Predict")
 
 # 4) Predict only on submit
 if submitted:
     X_user = pd.DataFrame([inputs])
-    print(X_user)
     # Prediction
     pred = pipe.predict(X_user)[0]
 
